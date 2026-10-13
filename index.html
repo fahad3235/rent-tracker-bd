@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House Rent Tracker - rent-tracker-bd</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1 id="h-title" data-i18n="appTitle">House Rent Tracker</h1>
+    <div class="sub">rent-tracker-bd &middot; offline &middot; no account needed</div>
+  </div>
+  <button id="langBtn" type="button">Bangla</button>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <button type="button" data-tab="dashboard" class="active" data-i18n="tabDashboard">Dashboard</button>
+  <button type="button" data-tab="tenants" data-i18n="tabTenants">Tenants</button>
+  <button type="button" data-tab="bills" data-i18n="tabBills">Bills</button>
+  <button type="button" data-tab="payments" data-i18n="tabPayments">Payments</button>
+  <button type="button" data-tab="data" data-i18n="tabData">Data</button>
+</nav>
+
+<main>
+  <!-- DASHBOARD -->
+  <section class="panel active" data-panel="dashboard">
+    <div class="card">
+      <h2><span data-i18n="tabDashboard">Dashboard</span> &mdash; <span id="dashMonthLabel"></span></h2>
+      <div class="grid">
+        <div class="stat"><div class="label" data-i18n="expected">Expected this month</div><div class="value" id="vExpected">0</div></div>
+        <div class="stat"><div class="label" data-i18n="collected">Collected this month</div><div class="value" id="vCollected">0</div></div>
+        <div class="stat warn"><div class="label" data-i18n="outstanding">Outstanding this month</div><div class="value" id="vOutstanding">0</div></div>
+        <div class="stat"><div class="label" data-i18n="rate">Collection rate</div><div class="value" id="vRate">0.00%</div></div>
+        <div class="stat warn"><div class="label" data-i18n="arrears">Total arrears (all months)</div><div class="value" id="vArrears">0</div></div>
+        <div class="stat"><div class="label" data-i18n="depositsHeld">Advance deposits held (active)</div><div class="value" id="vDeposits">0</div></div>
+        <div class="stat warn"><div class="label" data-i18n="overdueCount">Overdue bills</div><div class="value" id="vOverdue">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="duesTitle">Dues by tenant</h2>
+      <div id="duesList" class="list"></div>
+    </div>
+  </section>
+
+  <!-- TENANTS -->
+  <section class="panel" data-panel="tenants">
+    <div class="card">
+      <h2 data-i18n="addTenant">Add tenant</h2>
+      <div id="tenant-err" class="errbox" role="alert"></div>
+      <div class="row">
+        <div><label for="t-name" data-i18n="name">Name</label><input id="t-name" type="text" autocomplete="off"></div>
+        <div><label for="t-flat" data-i18n="flat">Flat / unit</label><input id="t-flat" type="text" autocomplete="off"></div>
+      </div>
+      <div class="row">
+        <div><label for="t-rent" data-i18n="monthlyRent">Monthly rent (BDT)</label><input id="t-rent" type="text" inputmode="decimal" autocomplete="off"></div>
+        <div><label for="t-deposit" data-i18n="deposit">Advance deposit (BDT)</label><input id="t-deposit" type="text" inputmode="decimal" autocomplete="off"></div>
+        <div><label for="t-movein" data-i18n="moveIn">Move-in date</label><input id="t-movein" type="date"></div>
+      </div>
+      <div style="margin-top:12px"><button id="btn-add-tenant" type="button" data-i18n="saveTenant">Save tenant</button></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="tabTenants">Tenants</h2>
+      <div id="tenantList" class="list"></div>
+    </div>
+  </section>
+
+  <!-- BILLS -->
+  <section class="panel" data-panel="bills">
+    <div class="card">
+      <h2 data-i18n="genTitle">Generate bills for a month</h2>
+      <div id="bill-err" class="errbox" role="alert"></div>
+      <div id="bill-ok" class="okbox"></div>
+      <label for="bill-month" data-i18n="billMonth">Bill month</label>
+      <input id="bill-month" type="month">
+      <div id="bill-gen-rows" style="margin-top:12px" class="list"></div>
+      <div style="margin-top:12px"><button id="btn-generate-bills" type="button" data-i18n="generateBills">Generate bills</button></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="allBills">All bills</h2>
+      <div id="billList" class="list"></div>
+    </div>
+  </section>
+
+  <!-- PAYMENTS -->
+  <section class="panel" data-panel="payments">
+    <div class="card">
+      <h2 data-i18n="recordPayment">Record a payment</h2>
+      <div id="pay-err" class="errbox" role="alert"></div>
+      <div id="pay-ok" class="okbox"></div>
+      <div class="row">
+        <div><label for="p-bill" data-i18n="bill">Bill</label><select id="p-bill"></select></div>
+        <div><label for="p-amount" data-i18n="amount">Amount (BDT)</label><input id="p-amount" type="text" inputmode="decimal" autocomplete="off"></div>
+      </div>
+      <div class="row">
+        <div><label for="p-method" data-i18n="method">Method</label><select id="p-method"></select></div>
+        <div><label for="p-date" data-i18n="date">Date</label><input id="p-date" type="date"></div>
+      </div>
+      <label for="p-note" data-i18n="note">Note (optional)</label>
+      <input id="p-note" type="text" autocomplete="off">
+      <div style="margin-top:12px"><button id="btn-add-payment" type="button" data-i18n="savePayment">Save payment</button></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="history">Payment history</h2>
+      <div class="row">
+        <div><label for="f-pay-tenant">Tenant filter</label><select id="f-pay-tenant"></select></div>
+        <div><label for="f-pay-month">Month filter</label><select id="f-pay-month"></select></div>
+      </div>
+      <div id="histList" class="list" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <!-- DATA -->
+  <section class="panel" data-panel="data">
+    <div class="card">
+      <h2 data-i18n="exportTitle">Export</h2>
+      <button id="btn-export" type="button" data-i18n="exportBtn">Download JSON export</button>
+    </div>
+    <div class="card">
+      <h2 data-i18n="importTitle">Import</h2>
+      <p data-i18n="importHint">Paste a JSON export from this app. Invalid data is rejected and your current data stays untouched.</p>
+      <div id="import-err" class="errbox" role="alert"></div>
+      <div id="import-ok" class="okbox"></div>
+      <label for="import-json">JSON</label>
+      <textarea id="import-json" rows="8" spellcheck="false"></textarea>
+      <div style="margin-top:12px"><button id="btn-import" type="button" data-i18n="importBtn">Import JSON</button></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="clearTitle">Danger zone</h2>
+      <p data-i18n="clearHint">Type DELETE in the box to erase all tenants, bills and payments.</p>
+      <div id="clear-err" class="errbox" role="alert"></div>
+      <label for="clear-confirm">Confirmation</label>
+      <input id="clear-confirm" type="text" autocomplete="off">
+      <div style="margin-top:12px"><button id="btn-clear-all" type="button" class="danger" data-i18n="clearBtn">Clear all data</button></div>
+    </div>
+  </section>
+</main>
+
+<footer><span data-i18n="footer">Personal tracker - not accounting software, not legal advice. All data stays in this browser.</span></footer>
+
+<script src="js/logic.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
